@@ -1,3 +1,4 @@
+import 'package:app/src/utils/injecto2bindings.dart';
 import 'package:core_module/core_module.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
@@ -20,7 +21,11 @@ class AppModuleEntry implements ModuleEntry {
 
   List<GetPage> get getPages => appPages
       .map(
-        (e) => GetPage(name: e.routeName, page: e.page),
+        (e) => GetPage(
+          name: e.routeName,
+          page: e.page,
+          binding: InjectorBindings(e.injector),
+        ),
       )
       .toList();
 

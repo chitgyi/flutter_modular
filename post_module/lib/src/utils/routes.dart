@@ -1,4 +1,4 @@
 abstract class PostRoutes {
-  static const posts = "/Posts";
-  static const postDetails = "/Posts/:id";
+  static const posts = "/posts";
+  static const postDetails = "/posts/:id";
 }

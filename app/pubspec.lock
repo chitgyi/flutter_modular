@@ -183,6 +183,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.1"
+  either_dart:
+    dependency: transitive
+    description:
+      name: either_dart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.4"
   fake_async:
     dependency: transitive
     description:
@@ -590,6 +597,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.2"
+  vmb:
+    dependency: transitive
+    description:
+      path: "."
+      ref: main
+      resolved-ref: "94fdfbb4f640d6871f0dc0221f2eb83d65691298"
+      url: "https://github.com/chitgyi/vmb.git"
+    source: git
+    version: "0.0.1"
   watcher:
     dependency: transitive
     description:

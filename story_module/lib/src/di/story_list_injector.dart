@@ -8,7 +8,7 @@ import 'package:story_module/src/data/repo/story_repo_impl.dart';
 import 'package:story_module/src/domain/repository/story_repo.dart';
 import 'package:story_module/src/presentation/viewmodels/story_viewmodel.dart';
 
-class StoryListDi implements Injector {
+class StoryListInjector implements Injector {
   @override
   void inject() {
     Logger.log("inject story list dependencies");

@@ -10,6 +10,7 @@ environment:
 dependencies:
   dio: ^4.0.6
   drift: ^1.7.1
+  either_dart: ^0.1.4
   flutter:
     sdk: flutter
   path: ^1.8.1
@@ -22,6 +23,7 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   retrofit_generator: ^4.0.2
   build_runner: ^2.2.0
+  drift_dev: ^1.7.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -246,7 +246,7 @@ class $StoriesTable extends Stories with TableInfo<$StoriesTable, Story> {
       'created_at', aliasedName, true,
       type: const IntType(),
       requiredDuringInsert: false,
-      defaultValue: Constant(DateTime.now()));
+      clientDefault: () => DateTime.now());
   @override
   List<GeneratedColumn> get $columns =>
       [id, title, description, image, createdAt];
@@ -305,14 +305,12 @@ class Post extends DataClass implements Insertable<Post> {
   final int id;
   final String title;
   final String body;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final DateTime? createdAt;
   Post(
       {required this.id,
       required this.title,
       required this.body,
-      required this.createdAt,
-      required this.updatedAt});
+      this.createdAt});
   factory Post.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Post(
@@ -323,9 +321,7 @@ class Post extends DataClass implements Insertable<Post> {
       body: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}body'])!,
       createdAt: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}created_at'])!,
-      updatedAt: const DateTimeType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}updated_at'])!,
+          .mapFromDatabaseResponse(data['${effectivePrefix}created_at']),
     );
   }
   @override
@@ -334,8 +330,9 @@ class Post extends DataClass implements Insertable<Post> {
     map['id'] = Variable<int>(id);
     map['title'] = Variable<String>(title);
     map['body'] = Variable<String>(body);
-    map['created_at'] = Variable<DateTime>(createdAt);
-    map['updated_at'] = Variable<DateTime>(updatedAt);
+    if (!nullToAbsent || createdAt != null) {
+      map['created_at'] = Variable<DateTime?>(createdAt);
+    }
     return map;
   }
 
@@ -344,8 +341,9 @@ class Post extends DataClass implements Insertable<Post> {
       id: Value(id),
       title: Value(title),
       body: Value(body),
-      createdAt: Value(createdAt),
-      updatedAt: Value(updatedAt),
+      createdAt: createdAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdAt),
     );
   }
 
@@ -356,8 +354,7 @@ class Post extends DataClass implements Insertable<Post> {
       id: serializer.fromJson<int>(json['id']),
       title: serializer.fromJson<String>(json['title']),
       body: serializer.fromJson<String>(json['body']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
-      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+      createdAt: serializer.fromJson<DateTime?>(json['createdAt']),
     );
   }
   @override
@@ -367,23 +364,16 @@ class Post extends DataClass implements Insertable<Post> {
       'id': serializer.toJson<int>(id),
       'title': serializer.toJson<String>(title),
       'body': serializer.toJson<String>(body),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
-      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+      'createdAt': serializer.toJson<DateTime?>(createdAt),
     };
   }
 
-  Post copyWith(
-          {int? id,
-          String? title,
-          String? body,
-          DateTime? createdAt,
-          DateTime? updatedAt}) =>
+  Post copyWith({int? id, String? title, String? body, DateTime? createdAt}) =>
       Post(
         id: id ?? this.id,
         title: title ?? this.title,
         body: body ?? this.body,
         createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
       );
   @override
   String toString() {
@@ -391,14 +381,13 @@ class Post extends DataClass implements Insertable<Post> {
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('body: $body, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt')
+          ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, title, body, createdAt, updatedAt);
+  int get hashCode => Object.hash(id, title, body, createdAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -406,46 +395,38 @@ class Post extends DataClass implements Insertable<Post> {
           other.id == this.id &&
           other.title == this.title &&
           other.body == this.body &&
-          other.createdAt == this.createdAt &&
-          other.updatedAt == this.updatedAt);
+          other.createdAt == this.createdAt);
 }
 
 class PostsCompanion extends UpdateCompanion<Post> {
   final Value<int> id;
   final Value<String> title;
   final Value<String> body;
-  final Value<DateTime> createdAt;
-  final Value<DateTime> updatedAt;
+  final Value<DateTime?> createdAt;
   const PostsCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
     this.body = const Value.absent(),
     this.createdAt = const Value.absent(),
-    this.updatedAt = const Value.absent(),
   });
   PostsCompanion.insert({
     this.id = const Value.absent(),
     required String title,
     required String body,
-    required DateTime createdAt,
-    required DateTime updatedAt,
+    this.createdAt = const Value.absent(),
   })  : title = Value(title),
-        body = Value(body),
-        createdAt = Value(createdAt),
-        updatedAt = Value(updatedAt);
+        body = Value(body);
   static Insertable<Post> custom({
     Expression<int>? id,
     Expression<String>? title,
     Expression<String>? body,
-    Expression<DateTime>? createdAt,
-    Expression<DateTime>? updatedAt,
+    Expression<DateTime?>? createdAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (title != null) 'title': title,
       if (body != null) 'body': body,
       if (createdAt != null) 'created_at': createdAt,
-      if (updatedAt != null) 'updated_at': updatedAt,
     });
   }
 
@@ -453,14 +434,12 @@ class PostsCompanion extends UpdateCompanion<Post> {
       {Value<int>? id,
       Value<String>? title,
       Value<String>? body,
-      Value<DateTime>? createdAt,
-      Value<DateTime>? updatedAt}) {
+      Value<DateTime?>? createdAt}) {
     return PostsCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
       body: body ?? this.body,
       createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
@@ -477,10 +456,7 @@ class PostsCompanion extends UpdateCompanion<Post> {
       map['body'] = Variable<String>(body.value);
     }
     if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
-    }
-    if (updatedAt.present) {
-      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+      map['created_at'] = Variable<DateTime?>(createdAt.value);
     }
     return map;
   }
@@ -491,8 +467,7 @@ class PostsCompanion extends UpdateCompanion<Post> {
           ..write('id: $id, ')
           ..write('title: $title, ')
           ..write('body: $body, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt')
+          ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
@@ -523,15 +498,12 @@ class $PostsTable extends Posts with TableInfo<$PostsTable, Post> {
   final VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
   @override
   late final GeneratedColumn<DateTime?> createdAt = GeneratedColumn<DateTime?>(
-      'created_at', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  final VerificationMeta _updatedAtMeta = const VerificationMeta('updatedAt');
+      'created_at', aliasedName, true,
+      type: const IntType(),
+      requiredDuringInsert: false,
+      clientDefault: () => DateTime.now());
   @override
-  late final GeneratedColumn<DateTime?> updatedAt = GeneratedColumn<DateTime?>(
-      'updated_at', aliasedName, false,
-      type: const IntType(), requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns => [id, title, body, createdAt, updatedAt];
+  List<GeneratedColumn> get $columns => [id, title, body, createdAt];
   @override
   String get aliasedName => _alias ?? 'posts';
   @override
@@ -559,14 +531,6 @@ class $PostsTable extends Posts with TableInfo<$PostsTable, Post> {
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
           createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
-    } else if (isInserting) {
-      context.missing(_createdAtMeta);
-    }
-    if (data.containsKey('updated_at')) {
-      context.handle(_updatedAtMeta,
-          updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta));
-    } else if (isInserting) {
-      context.missing(_updatedAtMeta);
     }
     return context;
   }

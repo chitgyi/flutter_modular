@@ -16,6 +16,10 @@ dependencies:
   flutter_svg: ^1.1.1+1
   faker: ^2.0.0
   get: ^4.6.5
+  vmb:
+    git:
+      url: https://github.com/chitgyi/vmb.git
+      ref: main
 
 dev_dependencies:
   flutter_test:

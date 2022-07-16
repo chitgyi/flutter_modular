@@ -5,6 +5,12 @@ import 'package:get/instance_manager.dart';
 class InitialInjections implements Bindings {
   @override
   void dependencies() {
-    Get.put<ApiManager>(ApiManager(Dio()));
+    Get.put<ApiManager>(ApiManager(
+      Dio(
+        BaseOptions(
+          baseUrl: "https://jsonplaceholder.typicode.com",
+        ),
+      ),
+    ));
   }
 }

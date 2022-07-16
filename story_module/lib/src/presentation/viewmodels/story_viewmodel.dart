@@ -1,16 +1,19 @@
+import 'dart:async';
+
 import 'package:core_module/core_module.dart';
 import 'package:faker/faker.dart';
-import 'package:flutter/material.dart';
 import 'package:story_module/src/domain/repository/story_repo.dart';
 import 'package:story_module/src/domain/usecases/get_stories.dart';
-import 'package:story_module/src/presentation/viewmodels/view_state.dart';
+import 'package:vmb/vmb.dart';
 
-class StoryViewModel extends ValueNotifier<StoryState> {
+class StoryViewModel extends Vmb<StoryState> {
   StoryViewModel(this._repo) : super(StoryState.loading());
   final StoryRepo _repo;
 
+  StreamSubscription? _subscription;
+
   void loadStories() {
-    GetStories(_repo)().listen((stories) {
+    _subscription = GetStories(_repo)().listen((stories) {
       value = StoryState.success(stories);
     }, onError: (error) {
       value = StoryState.error(error.toString());
@@ -26,9 +29,15 @@ class StoryViewModel extends ValueNotifier<StoryState> {
     );
     await _repo.insertStory(story);
   }
+
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
+  }
 }
 
-class StoryState extends State<List<Story>> {
+class StoryState extends BaseState<List<Story>> {
   StoryState({
     super.value,
     required super.viewState,
@@ -46,37 +55,4 @@ class StoryState extends State<List<Story>> {
         viewState: ViewState.success,
         value: stories,
       );
-}
-
-abstract class State<T> {
-  final T? value;
-  final ViewState viewState;
-  final String? errorMessage;
-
-  State({
-    this.value,
-    required this.viewState,
-    this.errorMessage,
-  });
-
-  Widget observe(
-    Widget Function(T viewModel) onSuccess, {
-    Widget Function(String errorMessage)? onError,
-    Widget Function()? onLoading,
-  }) {
-    switch (viewState) {
-      case ViewState.success:
-        return onSuccess(value as T);
-      case ViewState.failed:
-        return onError == null
-            ? Center(
-                child: Text(errorMessage!),
-              )
-            : onError.call(errorMessage!);
-      case ViewState.loading:
-        return onLoading == null
-            ? const Center(child: CircularProgressIndicator())
-            : onLoading.call();
-    }
-  }
 }

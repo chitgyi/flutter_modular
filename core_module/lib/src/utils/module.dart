@@ -1,3 +1,4 @@
+import 'package:core_module/core_module.dart';
 import 'package:flutter/material.dart';
 
 abstract class Module {
@@ -9,13 +10,13 @@ abstract class Module {
 class AppPage {
   final Widget Function() page;
   final String routeName;
-  final VoidCallback? initializer;
+  final Injector? injector;
   final bool isInitalRoute;
 
   AppPage({
     required this.page,
     required this.routeName,
-    this.initializer,
+    this.injector,
     this.isInitalRoute = false,
   });
 }

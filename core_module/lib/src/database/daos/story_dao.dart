@@ -1,4 +1,4 @@
-import 'package:core_module/src/database/database.dart';
+import 'package:core_module/core_module.dart';
 import 'package:core_module/src/database/entities/entities.dart';
 import 'package:drift/drift.dart';
 

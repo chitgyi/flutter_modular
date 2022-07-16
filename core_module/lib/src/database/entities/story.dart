@@ -7,5 +7,5 @@ class Stories extends Table {
   TextColumn get description => text()();
   TextColumn get image => text().nullable()();
   DateTimeColumn get createdAt =>
-      dateTime().nullable().withDefault(Constant(DateTime.now()))();
+      dateTime().clientDefault(() => DateTime.now()).nullable()();
 }
