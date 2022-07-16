@@ -169,13 +169,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.3"
-  db_module:
-    dependency: "direct main"
-    description:
-      path: "../db_module"
-      relative: true
-    source: path
-    version: "0.0.1"
   dio:
     dependency: "direct main"
     description:
@@ -459,6 +452,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.5.1"
+  post_module:
+    dependency: "direct main"
+    description:
+      path: "../post_module"
+      relative: true
+    source: path
+    version: "0.0.1"
   process:
     dependency: transitive
     description:
@@ -520,13 +520,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.2"
-  sqlite3_flutter_libs:
-    dependency: transitive
-    description:
-      name: sqlite3_flutter_libs
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.5.8"
   stack_trace:
     dependency: transitive
     description:
@@ -583,13 +576,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
-  transaction_module:
-    dependency: "direct main"
-    description:
-      path: "../transaction_module"
-      relative: true
-    source: path
-    version: "0.0.1"
   typed_data:
     dependency: transitive
     description:

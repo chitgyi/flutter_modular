@@ -1,5 +1,4 @@
 import 'package:core_module/core_module.dart';
-import 'package:db_module/database.dart';
 import 'package:get/instance_manager.dart';
 import 'package:story_module/src/data/local/impl/story_local_datasource_impl.dart';
 import 'package:story_module/src/data/local/story_local_datasource.dart';
@@ -12,9 +11,9 @@ import 'package:story_module/src/presentation/viewmodels/story_viewmodel.dart';
 class StoryListDi implements Injector {
   @override
   void inject() {
-    Logger.log('StoryListDi.inject');
+    Logger.log("inject story list dependencies");
     Get.create<StoryLocalDatasouce>(
-        () => StoryLocalDatasourceImpl(Get.find<Database>().storyDao));
+        () => StoryLocalDatasourceImpl(DatabaseModule().storyDao));
     Get.create<StoryRemoteDataSource>(
         () => StoryRemoteDatasourceImpl(Get.find<ApiManager>()));
     Get.create<StoryRepo>(() => StoryRepoImpl(Get.find(), Get.find()));

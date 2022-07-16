@@ -1,5 +1,4 @@
-import 'package:db_module/database.dart';
-import 'package:db_module/db_module.dart';
+import 'package:core_module/core_module.dart';
 import 'package:story_module/src/data/local/story_local_datasource.dart';
 
 class StoryLocalDatasourceImpl implements StoryLocalDatasouce {
@@ -10,7 +9,7 @@ class StoryLocalDatasourceImpl implements StoryLocalDatasouce {
   @override
   Stream<List<Story>> getStories() {
     return _storyDao
-        .watchTransactions()
+        .watchPosts()
         .map((event) => event..sort(((a, b) => a.title.compareTo(b.title))));
   }
 

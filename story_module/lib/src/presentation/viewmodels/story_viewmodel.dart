@@ -1,4 +1,4 @@
-import 'package:db_module/database.dart';
+import 'package:core_module/core_module.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:story_module/src/domain/repository/story_repo.dart';

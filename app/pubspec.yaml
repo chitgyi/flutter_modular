@@ -33,10 +33,8 @@ dependencies:
     path: ./../core_module
   story_module:
     path: ./../story_module
-  transaction_module:
-    path: ./../transaction_module
-  db_module:
-    path: ./../db_module
+  post_module:
+    path: ./../post_module
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

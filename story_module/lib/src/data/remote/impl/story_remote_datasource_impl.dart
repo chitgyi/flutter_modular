@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:core_module/core_module.dart';
-import 'package:db_module/database.dart';
 import 'package:faker/faker.dart';
 import 'package:story_module/src/data/remote/story_remote_data_source.dart';
 
@@ -29,8 +28,8 @@ class StoryRemoteDatasourceImpl implements StoryRemoteDataSource {
   }
 
   @override
-  Future<List<Transaction>> getTransactions() async {
-    // _api.getTransactions();
+  Future<List<Post>> getPosts() async {
+    // _api.getPosts();
     return [];
   }
 }

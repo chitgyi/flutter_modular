@@ -14,7 +14,6 @@ class StoryModule implements Module {
             return const StoryListPage();
           },
           routeName: StoryRoutes.stories,
-          isInitalRoute: true,
         ),
         AppPage(
           page: () => const StoryDetailsPage(),
